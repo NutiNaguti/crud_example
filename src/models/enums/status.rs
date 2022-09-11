@@ -1,10 +1,9 @@
 use serde::{Deserialize, Serialize};
 
+#[repr(i16)]
 #[derive(Debug, Serialize, Deserialize)]
-// #[serde(untagged)]
-// #[serde(rename_all = "lowercase")]
 pub enum Status {
-    Ready,
-    NotReady,
-    Canceled,
+    Ready = 1,
+    NotReady = 2,
+    Canceled = 3,
 }

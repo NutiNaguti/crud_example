@@ -1,10 +1,15 @@
 use rocket::serde::json::{json, Json, Value};
 
+use crate::database::todo;
+use crate::database::{self, Db};
 use crate::models::{self, todo::NewTodo};
 
 #[post("/create", format = "json", data = "<new_todo>")]
-pub async fn create(new_todo: Json<NewTodo>) -> Json<NewTodo> {
-    new_todo
+pub async fn create(new_todo: Json<NewTodo>, db: Db) {
+    let todo = db
+        .run(|conn| todo::create(conn, new_todo.into_inner()))
+        .await;
+    println!("{:?}", todo);
 }
 
 #[get("/all")]

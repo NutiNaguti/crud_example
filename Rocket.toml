@@ -1,0 +1,2 @@
+[default.databases]
+todo_db = {url="postgres://nutinaguti:password@localhost:5432/todo_db"}

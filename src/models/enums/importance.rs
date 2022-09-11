@@ -1,10 +1,9 @@
 use serde::{Deserialize, Serialize};
 
+#[repr(i16)]
 #[derive(Debug, Serialize, Deserialize)]
-// #[serde(untagged)]
-// #[serde(rename_all = "lowercase")]
 pub enum Importance {
-    Hight,
-    Medium,
-    Low,
+    Hight = 1,
+    Medium = 2,
+    Low = 3,
 }

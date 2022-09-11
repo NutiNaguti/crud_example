@@ -2,7 +2,10 @@
 extern crate rocket;
 #[macro_use]
 extern crate diesel;
+#[macro_use]
+extern crate rocket_sync_db_pools;
 
+mod config;
 mod database;
 mod models;
 mod routes;
@@ -15,14 +18,17 @@ async fn index() -> &'static str {
 
 #[launch]
 fn rocket() -> _ {
-    rocket::build().mount("/", routes![index]).mount(
-        "/api",
-        routes![
-            routes::crud::get_todos,
-            routes::crud::create,
-            routes::crud::get_todo,
-            routes::crud::update,
-            routes::crud::delete
-        ],
-    )
+    rocket::build()
+        .attach(database::Db::fairing())
+        .mount("/", routes![index])
+        .mount(
+            "/api",
+            routes![
+                routes::crud::get_todos,
+                routes::crud::create,
+                routes::crud::get_todo,
+                routes::crud::update,
+                routes::crud::delete
+            ],
+        )
 }

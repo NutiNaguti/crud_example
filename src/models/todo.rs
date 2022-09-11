@@ -4,6 +4,7 @@ use rocket::serde::{Deserialize, Serialize};
 
 use super::content;
 use super::enums;
+use crate::database::todo;
 
 #[derive(Debug, Serialize)]
 #[serde(crate = "rocket::serde")]
@@ -26,4 +27,16 @@ pub struct NewTodo {
     pub importance: enums::importance::Importance,
     pub status: enums::status::Status,
     pub content: content::Content,
+}
+
+impl From<NewTodo> for crate::database::todo::NewTodo {
+    fn from(t: NewTodo) -> Self {
+        todo::NewTodo {
+            timestamp: NaiveDateTime::from_timestamp(0, 0),
+            end_at: t.end_at,
+            importance: t.importance as i16,
+            status: t.status as i16,
+            text: String::from(""),
+        }
+    }
 }
