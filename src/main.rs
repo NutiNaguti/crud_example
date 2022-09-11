@@ -27,7 +27,7 @@ fn rocket() -> _ {
                 routes::crud::get_todos,
                 routes::crud::create,
                 routes::crud::get_todo,
-                routes::crud::update,
+                routes::crud::update_importance,
                 routes::crud::delete
             ],
         )

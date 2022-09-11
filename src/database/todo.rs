@@ -5,6 +5,7 @@ use diesel;
 use diesel::pg::PgConnection;
 use diesel::prelude::*;
 
+use crate::models::enums::importance::Importance;
 use crate::schema::content_links;
 use crate::schema::todos;
 
@@ -47,4 +48,26 @@ pub fn create(conn: &PgConnection, request: crate::models::todo::NewTodo) -> Tod
         .values(new_todo)
         .get_result(conn)
         .expect("Error creating todo")
+}
+
+pub fn get_all(conn: &PgConnection) -> Vec<Todo> {
+    todos::table.load::<Todo>(conn).unwrap()
+}
+
+pub fn get_by_id(conn: &PgConnection, id: i32) -> Todo {
+    todos::table.find(id).first(conn).unwrap()
+}
+
+pub fn delete(conn: &PgConnection, id: i32) -> usize {
+    diesel::delete(todos::table)
+        .filter(todos::id.eq(id))
+        .execute(conn)
+        .unwrap()
+}
+
+pub fn update_importance(conn: &PgConnection, id: i32, request: i16) -> Todo {
+    diesel::update(todos::table.filter(todos::id.eq(id)))
+        .set(todos::importance.eq(request))
+        .get_result(conn)
+        .unwrap()
 }
